@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '336916779483',
     projectId: 'freeluchapp',
     authDomain: 'freeluchapp.firebaseapp.com',
-    storageBucket: 'freeluchapp.firebasestorage.app',
+    storageBucket: 'freeluchapp.appspot.com', // ✅ diperbaiki
     measurementId: 'G-FH7J2KYWK3',
   );
 

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'profile_page.dart';
+import 'login.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +13,37 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  // Fungsi konfirmasi dan logout
+  void _konfirmasiLogout() async {
+    bool? keluar = await showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Konfirmasi Logout'),
+            content: const Text('Apakah Anda yakin ingin keluar?'),
+            actions: [
+              TextButton(
+                child: const Text('Batal'),
+                onPressed: () => Navigator.pop(context, false),
+              ),
+              TextButton(
+                child: const Text('Logout'),
+                onPressed: () => Navigator.pop(context, true),
+              ),
+            ],
+          ),
+    );
+
+    if (keluar == true) {
+      await FirebaseAuth.instance.signOut();
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const SimpleLoginPage()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,9 +54,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 2,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {
-            _scaffoldKey.currentState?.openDrawer();
-          },
+          onPressed: () => _scaffoldKey.currentState?.openDrawer(),
         ),
         title: const Text(
           'Freen Lunch App',
@@ -60,7 +92,14 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.logout), label: 'Log out'),
         ],
         onTap: (index) {
-          // Navigasi berdasarkan index
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          } else if (index == 2) {
+            _konfirmasiLogout();
+          }
         },
       ),
     );
@@ -102,9 +141,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 const CircleAvatar(
-                  backgroundImage: AssetImage(
-                    'assets/profile.jpg',
-                  ), // Ganti path sesuai aset
+                  backgroundImage: AssetImage('assets/profile.jpg'),
                   radius: 30,
                 ),
                 const SizedBox(height: 8),
@@ -120,30 +157,36 @@ class _HomePageState extends State<HomePage> {
                     elevation: 0,
                   ),
                   child: const Text(
-                    "Status",
+                    "Online",
                     style: TextStyle(color: Colors.black),
                   ),
                 ),
               ],
             ),
           ),
-          _drawerItem(Icons.dashboard, "Dashboard"),
-          _drawerItem(Icons.school, "Sekolah"),
-          _drawerItem(Icons.receipt_long, "Laporan Makan Siswa"),
-          _drawerItem(Icons.bar_chart, "Statistik"),
-          _drawerItem(Icons.logout, "Log Out"),
+          _drawerItem(Icons.dashboard, "Dashboard", () {}),
+          _drawerItem(Icons.school, "Sekolah", () {}),
+          _drawerItem(Icons.receipt_long, "Laporan Makan Siswa", () {}),
+          _drawerItem(Icons.bar_chart, "Statistik", () {}),
+          _drawerItem(Icons.person, "Profil", () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          }),
+          _drawerItem(Icons.logout, "Log Out", _konfirmasiLogout),
         ],
       ),
     );
   }
 
-  ListTile _drawerItem(IconData icon, String title) {
+  ListTile _drawerItem(IconData icon, String title, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: Colors.black),
       title: Text(title),
       onTap: () {
-        Navigator.pop(context);
-        // Tambah aksi navigasi di sini
+        Navigator.pop(context); // Tutup drawer dulu
+        onTap();
       },
     );
   }

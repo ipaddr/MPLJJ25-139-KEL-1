@@ -1,12 +1,63 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
-class SimpleLoginPage extends StatelessWidget {
-  const SimpleLoginPage({Key? key}) : super(key: key);
+class SimpleLoginPage extends StatefulWidget {
+  const SimpleLoginPage({super.key}); // ✅ gunakan super parameter
+
+  @override
+  SimpleLoginPageState createState() => SimpleLoginPageState(); // ✅ class state tidak private
+}
+
+class SimpleLoginPageState extends State<SimpleLoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  String _message = '';
+
+  void _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      if (mounted) {
+        setState(() {
+          _message = 'Email dan password tidak boleh kosong';
+        });
+      }
+    } else {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        if (mounted) {
+          setState(() {
+            if (e.code == 'user-not-found') {
+              _message = 'Tidak ada pengguna dengan email tersebut';
+            } else if (e.code == 'wrong-password') {
+              _message = 'Password yang dimasukkan salah';
+            } else {
+              _message = 'Terjadi kesalahan: ${e.message}';
+            }
+          });
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFDDEEFF), // Warna latar biru muda
+      backgroundColor: const Color(0xFFDDEEFF),
       body: Center(
         child: Container(
           width: 320,
@@ -25,7 +76,6 @@ class SimpleLoginPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Logo dan judul
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -39,10 +89,9 @@ class SimpleLoginPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-
-              // Input Email
               TextField(
-                decoration: InputDecoration(
+                controller: _emailController,
+                decoration: const InputDecoration(
                   hintText: "Email",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -54,11 +103,10 @@ class SimpleLoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Input Password
               TextField(
+                controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: "Password",
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -70,17 +118,11 @@ class SimpleLoginPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-
-              // Tombol Log in
               ElevatedButton(
-                onPressed: () {
-                  // Logika login di sini
-                },
+                onPressed: _handleLogin,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(
-                    0xFFBFD8EC,
-                  ), // warna latar tombol
-                  foregroundColor: Colors.black, // warna teks tombol
+                  backgroundColor: const Color(0xFFBFD8EC),
+                  foregroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 32,
                     vertical: 12,
@@ -95,7 +137,18 @@ class SimpleLoginPage extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ),
-              // Copyright
+              const SizedBox(height: 12),
+              Text(
+                _message,
+                style: TextStyle(
+                  color:
+                      _message == 'Anda berhasil login'
+                          ? Colors.green
+                          : Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
               const Text(
                 "2025 Free Lunch App",
                 style: TextStyle(fontSize: 12, color: Colors.grey),
