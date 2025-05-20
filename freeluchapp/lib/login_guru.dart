@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'home_page_guru.dart'; // Pastikan ini diimpor dengan benar
 
 class SimpleLoginPage extends StatefulWidget {
   const SimpleLoginPage({super.key});
@@ -39,16 +39,14 @@ class SimpleLoginPageState extends State<SimpleLoginPage> {
 
       if (mounted) {
         if (_selectedRole == 'Admin') {
-          // Navigasi ke tampilan admin
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
-          );
+          // Ganti ke halaman admin jika tersedia
+          setState(() {
+            _message = 'Login Admin berhasil';
+          });
         } else if (_selectedRole == 'Guru') {
-          // Navigasi ke tampilan guru (bisa diganti ke halaman khusus guru)
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const HomePageGuru()),
           );
         }
       }
