@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // 🔍 Tambahkan ini
 import 'firebase_options.dart';
 import 'login.dart';
+import 'home_page.dart'; // 🔍 Tambahkan ini
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const InitFirebase(), // Ganti ke widget inisialisasi
+      home: const InitFirebase(),
     );
   }
 }
@@ -32,7 +34,7 @@ class InitFirebase extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform, // ✅ gunakan ini
+        options: DefaultFirebaseOptions.currentPlatform,
       ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -44,7 +46,13 @@ class InitFirebase extends StatelessWidget {
             body: Center(child: Text('Error: ${snapshot.error}')),
           );
         } else {
-          return const SimpleLoginPage(); // ✅ lanjutkan ke login jika sukses
+          // ✅ Cek apakah user sudah login
+          final user = FirebaseAuth.instance.currentUser;
+          if (user != null) {
+            return const HomePage(); // ✅ Jika sudah login
+          } else {
+            return const SimpleLoginPage(); // 🔐 Jika belum login
+          }
         }
       },
     );
