@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'package:freeluchapp/admin/dashboard_page.dart'; // Pastikan path ini benar jika ada
+import 'package:freeluchapp/guru/home_page_guru.dart';
 
 class SimpleLoginPage extends StatefulWidget {
   const SimpleLoginPage({super.key});
@@ -39,16 +40,18 @@ class SimpleLoginPageState extends State<SimpleLoginPage> {
 
       if (mounted) {
         if (_selectedRole == 'Admin') {
-          // Navigasi ke tampilan admin
+          // Navigasi ke DashboardPage untuk Admin
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(
+              builder: (context) => const DashboardPage(),
+            ), // UBAH INI
           );
         } else if (_selectedRole == 'Guru') {
-          // Navigasi ke tampilan guru (bisa diganti ke halaman khusus guru)
+          // Navigasi ke tampilan guru
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const HomePageGuru()),
           );
         }
       }
@@ -134,6 +137,7 @@ class SimpleLoginPageState extends State<SimpleLoginPage> {
               DropdownButtonFormField<String>(
                 value: _selectedRole,
                 hint: const Text("Pilih Role"),
+                isExpanded: true,
                 items:
                     _roles.map((String role) {
                       return DropdownMenuItem<String>(
@@ -149,6 +153,14 @@ class SimpleLoginPageState extends State<SimpleLoginPage> {
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(color: Colors.blue),
                   ),
                   contentPadding: EdgeInsets.symmetric(
                     horizontal: 12,
@@ -181,9 +193,7 @@ class SimpleLoginPageState extends State<SimpleLoginPage> {
                 _message,
                 style: TextStyle(
                   color:
-                      _message == 'Anda berhasil login'
-                          ? Colors.green
-                          : Colors.red,
+                      _message.contains('berhasil') ? Colors.green : Colors.red,
                   fontWeight: FontWeight.bold,
                 ),
               ),
