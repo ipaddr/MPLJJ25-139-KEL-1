@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:freeluchapp/chatbot_screen.dart';
 import 'package:intl/intl.dart'; // Untuk format tanggal
 import 'package:freeluchapp/app_drawer_guru.dart'; // Drawer untuk navigasi guru
 
@@ -144,6 +145,18 @@ class _HomePageGuruState extends State<HomePageGuru> {
       appBar: AppBar(
         title: const Text('Free Lunch App'),
         backgroundColor: Colors.blueAccent,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.chat_bubble_outline), // Ikon chat
+            onPressed: () {
+              // Navigasi ke halaman ChatBotScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatBotScreen()),
+              );
+            },
+          ),
+        ],
       ),
       drawer: const AppDrawerGuru(), // Menggunakan drawer untuk navigasi guru
       body: _isLoading
@@ -240,8 +253,9 @@ class _HomePageGuruState extends State<HomePageGuru> {
                   Expanded(
                     child: Center(
                         child: Text(
-                            'Tidak ada informasi terkini yang tersedia.',
-                            style: TextStyle(color: Colors.grey[600]))),
+                      'Tidak ada informasi terkini yang tersedia.',
+                      style: TextStyle(color: Colors.grey[600]),
+                    )),
                   ),
                 ],
               ),
