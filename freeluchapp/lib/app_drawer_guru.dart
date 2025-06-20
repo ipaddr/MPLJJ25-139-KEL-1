@@ -1,13 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// Import login.dart karena sekarang kita akan navigasi manual ke sana
 import 'package:freeluchapp/login.dart';
-
-// Import halaman-halaman yang akan dinavigasi secara internal
 import 'package:freeluchapp/guru/home_page_guru.dart';
 import 'package:freeluchapp/guru/jadwal_menu_guru.dart';
 import 'package:freeluchapp/guru/laporan_riwayat_siswa.dart';
-import 'package:freeluchapp/guru/konfirmasi_makan_siswa.dart';
+import 'package:freeluchapp/guru/konfirmasi_makan_siswa.dart'; // Untuk halaman konfirmasi harian
+import 'package:freeluchapp/guru/tambah_siswa.dart'; // <<< Import halaman Tambah Siswa Baru
 
 class AppDrawerGuru extends StatefulWidget {
   const AppDrawerGuru({super.key});
@@ -169,6 +168,51 @@ class _AppDrawerGuruState extends State<AppDrawerGuru> {
               MaterialPageRoute(builder: (_) => const KonfirmasiMakanSiswa()),
             );
           }),
+          // <<< ITEM MENU BARU UNTUK TAMBAH SISWA >>>
+          _buildDrawerItem(Icons.person_add, 'Tambah Siswa', () async {
+            Navigator.of(context).pop(); // Tutup drawer
+
+            // Ambil schoolId dari profil guru yang login untuk diteruskan
+            // Ini memerlukan Firestore, jadi pastikan sudah diinisialisasi
+            String? schoolId;
+            User? currentUser = FirebaseAuth.instance.currentUser;
+            if (currentUser != null) {
+              try {
+                DocumentSnapshot userDoc = await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(currentUser.uid)
+                    .get();
+                if (userDoc.exists && userDoc.data() != null) {
+                  schoolId = userDoc.get('schoolId') ?? '';
+                }
+              } catch (e) {
+                print("Error getting schoolId for Tambah Siswa: $e");
+                // Tampilkan pesan error ke pengguna jika schoolId tidak bisa diambil
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Gagal memuat ID sekolah untuk menambah siswa: $e')),
+                );
+                return; // Hentikan navigasi
+              }
+            }
+
+            if (schoolId != null && schoolId.isNotEmpty) {
+              Navigator.push(
+                // Gunakan push, bukan pushReplacement, agar bisa kembali ke drawer
+                context,
+                MaterialPageRoute(
+                    builder: (_) => TambahSiswaPage(schoolId: schoolId!)),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                    content: Text(
+                        'Anda tidak terhubung ke sekolah mana pun untuk menambah siswa.')),
+              );
+            }
+          }),
+          // <<< AKHIR ITEM MENU BARU >>>
           const Divider(height: 20, thickness: 1, indent: 16, endIndent: 16),
 
           // Bagian Logout

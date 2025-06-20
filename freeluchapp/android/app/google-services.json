@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "336916779483",
-    "project_id": "freeluchapp",
-    "storage_bucket": "freeluchapp.firebasestorage.app"
+    "project_number": "760784195314",
+    "project_id": "freeluchapp-d2751",
+    "storage_bucket": "freeluchapp-d2751.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:336916779483:android:90064548a92c21cc3917fe",
+        "mobilesdk_app_id": "1:760784195314:android:68399fba07faea5c314a6b",
         "android_client_info": {
           "package_name": "com.example.freeluchapp"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDEaILU1yZtC6Dwoygimth7M_DhEeKwe2U"
+          "current_key": "AIzaSyANFjp2ypvKyw3t3M6t1tIswhVpe3vVkbs"
         }
       ],
       "services": {

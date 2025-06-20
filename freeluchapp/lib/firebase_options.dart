@@ -41,29 +41,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBdM8cmY7v9wP6La8MfXlnVIoQGsNx31JM',
-    appId: '1:336916779483:web:82910675867155c03917fe',
-    messagingSenderId: '336916779483',
-    projectId: 'freeluchapp',
-    authDomain: 'freeluchapp.firebaseapp.com',
-    storageBucket: 'freeluchapp.appspot.com', // ✅ diperbaiki
-    measurementId: 'G-FH7J2KYWK3',
+    apiKey: 'AIzaSyDCzQvuEXwASWwIvhxJAtHN3saW2mULpVM',
+    appId: '1:760784195314:web:74f25f706a2080ce314a6b',
+    messagingSenderId: '760784195314',
+    projectId: 'freeluchapp-d2751',
+    authDomain: 'freeluchapp-d2751.firebaseapp.com',
+    storageBucket: 'freeluchapp-d2751.firebasestorage.app',
+    measurementId: 'G-2ZNYY460NH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDEaILU1yZtC6Dwoygimth7M_DhEeKwe2U',
-    appId: '1:336916779483:android:90064548a92c21cc3917fe',
-    messagingSenderId: '336916779483',
-    projectId: 'freeluchapp',
-    storageBucket: 'freeluchapp.firebasestorage.app',
+    apiKey: 'AIzaSyANFjp2ypvKyw3t3M6t1tIswhVpe3vVkbs',
+    appId: '1:760784195314:android:68399fba07faea5c314a6b',
+    messagingSenderId: '760784195314',
+    projectId: 'freeluchapp-d2751',
+    storageBucket: 'freeluchapp-d2751.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBhGctg3EVDDbPH_AiKXQUTZmoHsfTT-a4',
-    appId: '1:336916779483:ios:c68d653bad58a2913917fe',
-    messagingSenderId: '336916779483',
-    projectId: 'freeluchapp',
-    storageBucket: 'freeluchapp.firebasestorage.app',
+    apiKey: 'AIzaSyBAU08w7vhLUsiQlMVhs4mKv-r1MVzHtUE',
+    appId: '1:760784195314:ios:a6815a57c89a6179314a6b',
+    messagingSenderId: '760784195314',
+    projectId: 'freeluchapp-d2751',
+    storageBucket: 'freeluchapp-d2751.firebasestorage.app',
     iosBundleId: 'com.example.freeluchapp',
   );
 
